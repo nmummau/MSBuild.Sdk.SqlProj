@@ -10,7 +10,9 @@
     <MSBuildAllProjects Condition="'$(MSBuildToolsVersion)' != 'Current'">$(MSBuildAllProjects);$(MsBuildThisFileFullPath)</MSBuildAllProjects>
     <SqlServerVersion>Sql150</SqlServerVersion>
     <TargetExt>.dacpac</TargetExt>
-    <SqlPackageVersion>170.2.70</SqlPackageVersion>
+    <!-- SqlPackageVersion is inherited from Directory.Build.props in the SDK repo -->
+    <!-- Users can override this in their own project files if needed -->
+    <SqlPackageVersion Condition="'$(SqlPackageVersion)'==''">170.2.70</SqlPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <OutputType>Exe</OutputType>
+        <PublishAot>false</PublishAot>
+        
+        <!-- Enable .NET SDK container support (built-in for .NET 8+) -->
+        <ContainerBaseImage>mcr.microsoft.com/dotnet/runtime:8.0</ContainerBaseImage>
+        <ContainerWorkingDirectory>/work</ContainerWorkingDirectory>
+        
+        <!-- Container configuration (provided by Sdk.targets) -->
+        <ContainerRepository Condition="'$(ContainerRepository)'==''">sqlproj-publisher</ContainerRepository>
+        <ContainerImageTags Condition="'$(ContainerImageTags)'==''">latest</ContainerImageTags>
+        
+        <!-- Use this app as entrypoint -->
+        <ContainerEntrypoint>dotnet</ContainerEntrypoint>
+        <ContainerEntrypointArgs>/app/SqlPackageRunner.dll</ContainerEntrypointArgs>
+    </PropertyGroup>
+
+    <!-- Install sqlpackage as a dotnet tool and include it in the container -->
+    <Target Name="InstallSqlPackageTool" BeforeTargets="ComputeFilesToPublish">
+        <PropertyGroup>
+            <_SqlPackageToolPath>$(IntermediateOutputPath)sqlpkg</_SqlPackageToolPath>
+        </PropertyGroup>
+        
+        <!-- Clean up any previous installation first -->
+        <RemoveDir Directories="$(_SqlPackageToolPath)" Condition="Exists('$(_SqlPackageToolPath)')" />
+        
+        <!-- Install the tool to a temp directory -->
+        <Exec Command='dotnet tool install microsoft.sqlpackage --tool-path "$(_SqlPackageToolPath)" --version $(SqlPackageVersion)' 
+              IgnoreExitCode="false" />
+    </Target>
+
+    <!-- Include sqlpackage tool files in the container -->
+    <Target Name="IncludeSqlPackageInContainer"
+            DependsOnTargets="InstallSqlPackageTool"
+            BeforeTargets="ComputeFilesToPublish">
+        <ItemGroup>
+            <!-- Include the tool manifest and binaries -->
+            <_SqlPkgStoreFiles Include="$(_SqlPackageToolPath)\.store\**\*.*" />
+            
+            <ResolvedFileToPublish Include="@(_SqlPkgStoreFiles)" Condition="Exists('%(FullPath)')">
+                <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+                <DestinationRelativePath>sqlpkg\.store\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+            </ResolvedFileToPublish>
+            
+            <!-- Also include the wrapper executable -->
+            <_SqlPkgExe Include="$(_SqlPackageToolPath)\sqlpackage*" />
+            <ResolvedFileToPublish Include="@(_SqlPkgExe)" Condition="Exists('%(FullPath)')">
+                <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+                <DestinationRelativePath>sqlpkg\%(Filename)%(Extension)</DestinationRelativePath>
+            </ResolvedFileToPublish>
+        </ItemGroup>
+    </Target>
+
+    <!-- Copy staged dacpacs into the container at /work -->
+    <ItemGroup>
+        <ContainerContent Include="$(ContainerStagingDir)\*.dacpac" Condition="Exists('$(ContainerStagingDir)')">
+            <ContainerPath>/work/</ContainerPath>
+        </ContainerContent>
+        
+        <!-- Also include publish profiles if they exist -->
+        <ContainerContent Include="$(ContainerStagingDir)\*.publish.xml" Condition="Exists('$(ContainerStagingDir)')">
+            <ContainerPath>/work/</ContainerPath>
+        </ContainerContent>
+    </ItemGroup>
+
+    <!-- Set environment variable for the main dacpac name -->
+    <ItemGroup>
+        <ContainerEnvironmentVariable Include="DACPAC_NAME" Value="$(ContainerDacpacName)" />
+    </ItemGroup>
+</Project>
