@@ -84,7 +84,7 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool
             RunDeploymentScriptFromReferences(dacpacPackage, targetDatabaseName, true);
         }
 
-        public void Deploy(FileInfo dacpacPackage, string targetDatabaseName)
+        public bool Deploy(FileInfo dacpacPackage, string targetDatabaseName)
         {
             ArgumentNullException.ThrowIfNull(dacpacPackage);
 
@@ -104,6 +104,7 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool
                 services.Message += HandleDacServicesMessage;
                 services.Deploy(package, targetDatabaseName, true, DeployOptions);
                 _console.WriteLine($"Successfully deployed database '{targetDatabaseName}'");
+                return true;
             }
             catch (DacServicesException ex)
             {
@@ -115,11 +116,13 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool
                 {
                     _console.WriteLine($"ERROR: Deployment of database '{targetDatabaseName}' failed: {ex.Message}");
                 }
+                return false;
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
             {
                 _console.WriteLine($"ERROR: An unknown error occurred while deploying database '{targetDatabaseName}': {ex.Message}");
+                return false;
             }
 #pragma warning restore CA1031 // Do not catch general exception types
         }

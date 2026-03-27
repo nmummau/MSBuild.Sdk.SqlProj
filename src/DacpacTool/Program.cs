@@ -43,8 +43,8 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool
             {
                 foreach (var propertyValue in options.BuildProperty)
                 {
-                    string[] keyValuePair = propertyValue.Split('=', 2);
-                    packageBuilder.SetProperty(keyValuePair[0], keyValuePair[1]);
+                    var (key, value) = ParseNameValueArgument(propertyValue, "--buildproperty");
+                    packageBuilder.SetProperty(key, value);
                 }
             }
 
@@ -61,7 +61,7 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool
                     {
                         packageBuilder.AddReference(referenceDetails[0]);
                     }
-                    if (referenceDetails.Length == 2)
+                    else if (referenceDetails.Length == 2)
                     {
                         packageBuilder.AddReference(referenceDetails[0], referenceDetails[1]);
                     }
@@ -206,8 +206,8 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool
                 {
                     foreach (var sqlCmdVar in options.SqlCmdVar)
                     {
-                        string[] keyValuePair = sqlCmdVar.Split('=', 2);
-                        deployer.SetSqlCmdVariable(keyValuePair[0], keyValuePair[1]);
+                        var (key, value) = ParseNameValueArgument(sqlCmdVar, "--sqlcmdvar");
+                        deployer.SetSqlCmdVariable(key, value);
                     }
                 }
 
@@ -234,7 +234,10 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool
                     deployer.RunPreDeploymentScriptFromReferences(options.Input, options.TargetDatabaseName);
                 }
 
-                deployer.Deploy(options.Input, options.TargetDatabaseName);
+                if (!deployer.Deploy(options.Input, options.TargetDatabaseName))
+                {
+                    return 1;
+                }
 
                 if (options.RunScriptsFromReferences)
                 {
@@ -273,6 +276,17 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool
 #pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 #endif
+        }
+
+        private static (string Key, string Value) ParseNameValueArgument(string argument, string optionName)
+        {
+            string[] keyValuePair = argument.Split('=', 2);
+            if (keyValuePair.Length != 2 || string.IsNullOrWhiteSpace(keyValuePair[0]))
+            {
+                throw new ArgumentException($"Expected NAME=VALUE format for {optionName}: {argument}");
+            }
+
+            return (keyValuePair[0], keyValuePair[1]);
         }
     }
 }

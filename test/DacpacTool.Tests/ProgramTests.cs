@@ -152,6 +152,58 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool.Tests
         }
 
         [TestMethod]
+        public async Task BuildDacpac_WithSinglePartReference_BuildsPackage()
+        {
+            var referenceOutput = new FileInfo(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.dacpac"));
+            var consumerOutput = new FileInfo(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.dacpac"));
+            var referenceInputList = CreateInputListFile("../../../../TestProject/Tables/MyTable.sql");
+
+            try
+            {
+                var referenceOptions = new BuildOptions
+                {
+                    Name = "ReferencePackage",
+                    Version = "1.0.0.0",
+                    Output = referenceOutput,
+                    InputFile = referenceInputList,
+                };
+
+                (await Program.BuildDacpac(referenceOptions)).ShouldBe(0);
+                File.Exists(referenceOutput.FullName).ShouldBeTrue();
+
+                var consumerOptions = new BuildOptions
+                {
+                    Name = "ConsumerPackage",
+                    Version = "1.0.0.0",
+                    Output = consumerOutput,
+                    Reference = [referenceOutput.FullName],
+                };
+
+                var result = await Program.BuildDacpac(consumerOptions);
+
+                result.ShouldBe(0);
+                File.Exists(consumerOutput.FullName).ShouldBeTrue();
+            }
+            finally
+            {
+                if (referenceOutput.Exists)
+                {
+                    referenceOutput.Delete();
+                }
+
+                if (consumerOutput.Exists)
+                {
+                    consumerOutput.Delete();
+                }
+
+                if (referenceInputList.Exists)
+                {
+                    referenceInputList.Delete();
+                }
+            }
+        }
+
+        [TestMethod]
         public async Task BuildDacpac_MissingInputList_Throws()
         {
             var outputPath = new FileInfo(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.dacpac"));
@@ -167,6 +219,21 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool.Tests
 
             (await Should.ThrowAsync<ArgumentException>(() => Program.BuildDacpac(options)))
                 .Message.ShouldBe($"No input files found, missing {missingInputList.Name}");
+        }
+
+        [TestMethod]
+        public async Task BuildDacpac_MalformedBuildProperty_ThrowsCleanValidationError()
+        {
+            var options = new BuildOptions
+            {
+                Name = "MyPackage",
+                Version = "1.0.0.0",
+                Output = new FileInfo(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.dacpac")),
+                BuildProperty = ["InvalidPropertyWithoutEquals"],
+            };
+
+            (await Should.ThrowAsync<ArgumentException>(() => Program.BuildDacpac(options)))
+                .Message.ShouldBe("Expected NAME=VALUE format for --buildproperty: InvalidPropertyWithoutEquals");
         }
 
         [TestMethod]
@@ -297,7 +364,7 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool.Tests
         }
 
         [TestMethod]
-        public void DeployDacpac_InvalidSqlCmdVar_ReturnsGeneralError()
+        public void DeployDacpac_InvalidSqlCmdVar_ReturnsValidationError()
         {
             var options = new DeployOptions
             {
@@ -319,7 +386,8 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool.Tests
                     var result = Program.DeployDacpac(options);
 
                     result.ShouldBe(1);
-                    writer.ToString().ShouldContain("ERROR: An error ocurred during deployment:");
+                    writer.ToString().ShouldContain("ERROR: An error occured while validating arguments:");
+                    writer.ToString().ShouldContain("Expected NAME=VALUE format for --sqlcmdvar");
                 }
                 finally
                 {
@@ -359,6 +427,65 @@ namespace MSBuild.Sdk.SqlProj.DacpacTool.Tests
                 finally
                 {
                     Console.SetOut(originalOut);
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task DeployDacpac_WhenDeploymentFails_ReturnsOne()
+        {
+            var outputPath = new FileInfo(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.dacpac"));
+            var inputList = CreateInputListFile("../../../../TestProject/Tables/MyTable.sql");
+
+            try
+            {
+                var buildOptions = new BuildOptions
+                {
+                    Name = "DeploySource",
+                    Version = "1.0.0.0",
+                    Output = outputPath,
+                    InputFile = inputList,
+                };
+
+                (await Program.BuildDacpac(buildOptions)).ShouldBe(0);
+
+                var deployOptions = new DeployOptions
+                {
+                    Input = outputPath,
+                    TargetServerName = "localhost",
+                    TargetPort = 1,
+                    TargetDatabaseName = "MyDb",
+                };
+
+                using var writer = new StringWriter();
+                var originalOut = Console.Out;
+
+                lock (ConsoleLock)
+                {
+                    try
+                    {
+                        Console.SetOut(writer);
+
+                        var result = Program.DeployDacpac(deployOptions);
+
+                        result.ShouldBe(1);
+                    }
+                    finally
+                    {
+                        Console.SetOut(originalOut);
+                    }
+                }
+            }
+            finally
+            {
+                if (outputPath.Exists)
+                {
+                    outputPath.Delete();
+                }
+
+                if (inputList.Exists)
+                {
+                    inputList.Delete();
                 }
             }
         }
