@@ -33,6 +33,11 @@ const config = {
     ]
   ],
   themeConfig: {
+    colorMode: {
+      defaultMode: "dark",
+      disableSwitch: false,
+      respectPrefersColorScheme: true
+    },
     navbar: {
       title: "MSBuild.Sdk.SqlProj",
       items: [
