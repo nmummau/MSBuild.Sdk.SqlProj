@@ -1,9 +1,9 @@
 const config = {
   title: "MSBuild.Sdk.SqlProj",
   tagline: "Build SQL Server dacpacs with SDK-style .NET projects",
-  url: "https://nmummau.github.io",
+  url: "https://rr-wfm.github.io",
   baseUrl: "/MSBuild.Sdk.SqlProj/",
-  organizationName: "nmummau",
+  organizationName: "rr-wfm",
   projectName: "MSBuild.Sdk.SqlProj",
   onBrokenLinks: "throw",
   i18n: {
@@ -23,7 +23,7 @@ const config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: "https://github.com/nmummau/MSBuild.Sdk.SqlProj/tree/master/"
+          editUrl: "https://github.com/rr-wfm//MSBuild.Sdk.SqlProj/tree/master/"
         },
         blog: false,
         pages: false,
@@ -54,7 +54,7 @@ const config = {
           dropdownActiveClassDisabled: true
         },
         {
-          href: "https://github.com/nmummau/MSBuild.Sdk.SqlProj",
+          href: "https://github.com/rr-wfm/MSBuild.Sdk.SqlProj",
           label: "GitHub",
           position: "right"
         },
@@ -86,11 +86,11 @@ const config = {
           items: [
             {
               label: "Repository",
-              href: "https://github.com/nmummau/MSBuild.Sdk.SqlProj"
+              href: "https://github.com/rr-wfm/MSBuild.Sdk.SqlProj"
             },
             {
               label: "Releases",
-              href: "https://github.com/nmummau/MSBuild.Sdk.SqlProj/releases"
+              href: "https://github.com/rr-wfm/MSBuild.Sdk.SqlProj/releases"
             }
           ]
         }
