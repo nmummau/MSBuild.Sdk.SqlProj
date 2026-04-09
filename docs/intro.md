@@ -17,4 +17,4 @@ If you're looking for a video introduction, please watch this [dotnetFlix episod
 
 ## Code of conduct
 
-Please take a moment to familiarize yourself with the [code of conduct](../CODE_OF_CONDUCT.md) for this repository.
+Please take a moment to familiarize yourself with the [code of conduct](https://github.com/rr-wfm/MSBuild.Sdk.SqlProj/blob/master/CODE_OF_CONDUCT.md) for this repository.
