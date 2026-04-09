@@ -74,7 +74,10 @@ There is support for publishing a project to a SQL Server using the `dotnet publ
 There are a couple of properties that control the deployment process which have some defaults to make the experience as smooth as possible for local development. For example, on Windows if you have a default SQL Server instance running on your local machine running `dotnet publish /t:PublishDatabase` creates a database with the same name as the project. Unfortunately on Mac and Linux we cannot use Windows authentication, so you'll need to specify a username and password:
 
 ```bash
-dotnet publish /t:PublishDatabase /p:TargetUser=<username> /p:TargetPassword=<password>
+dotnet publish \
+  /t:PublishDatabase \
+  /p:TargetUser=<username> \
+  /p:TargetPassword=<password>
 ```
 
 To further customize the deployment process, you can use the following properties which can either be set in the project file or specified on the command line (using the `/p:<property>=<value>` syntax shown above).
@@ -129,7 +132,10 @@ dotnet publish /t:PublishContainer
 By default, the image will be tagged with the name of your project. You can customize the image name and tag by setting the `ContainerRepository` and `ContainerImageTag` properties on the command line. For example:
 
 ```bash
-dotnet publish /t:PublishContainer /p:ContainerRepository=my-database-image /p:ContainerImageTag=v1.0.0
+dotnet publish \
+  /t:PublishContainer \
+  /p:ContainerRepository=my-database-image \
+  /p:ContainerImageTag=v1.0.0
 ```
 
 You can also set these properties in your project file if you prefer:
@@ -148,7 +154,10 @@ You can also set these properties in your project file if you prefer:
 Once the container image is published, you can run it using the following command:
 
 ```bash
-docker run my-database-image:v1.0.0 --rm /TargetConnectionString=<your-connection-string>
+docker run \
+  my-database-image:v1.0.0 \
+  --rm \
+  /TargetConnectionString=<your-connection-string>
 ```
 
 This will execute SqlPackage inside the container, deploying the .dacpac to the specified SQL Server instance. You can pass any additional SqlPackage parameters as needed. However by default the container is configured to pass `/Action:Publish` and `/SourceFile:<your-dacpac-file>.dacpac`. For a full list of available parameters, refer to the [SqlPackage documentation](https://learn.microsoft.com/en-us/sql/tools/sqlpackage/sqlpackage?view=sql-server-ver17).

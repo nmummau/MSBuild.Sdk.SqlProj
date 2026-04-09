@@ -80,13 +80,21 @@ Wildcards are supported for all nodes (`Content`, `None`, etc.). For example, `<
 If you want to initialize your project with scripted objects from an existing database, you can do so with the following command:
 
 ```bash
-sqlpackage /Action:Extract /Properties:ExtractTarget=Flat /SourceConnectionString:"<connection_string>" /TargetFile:<target_new_folder>
+sqlpackage \
+  /Action:Extract \
+  /Properties:ExtractTarget=Flat \
+  /SourceConnectionString:"<connection_string>" \
+  /TargetFile:<target_new_folder>
 ```
 
 For example:
 
 ```bash
-sqlpackage /a:Extract /p:ExtractTarget=Flat /scs:"data source=.\SQLEXPRESS;initial catalog=Chinook;Trusted_Connection=true;encrypt=False" /tf:.\Tables
+sqlpackage \
+  /a:Extract \
+  /p:ExtractTarget=Flat \
+  /scs:"data source=.\SQLEXPRESS;initial catalog=Chinook;Trusted_Connection=true;encrypt=False" \
+  /tf:.\Tables
 ```
 
 > Note: The /tf parameter is currently required, and must refer to a non-existing folder.

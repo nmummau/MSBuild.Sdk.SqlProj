@@ -11,6 +11,7 @@ const config = {
     locales: ["en"]
   },
   markdown: {
+    mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: "warn"
     }
@@ -97,9 +98,15 @@ const config = {
     },
     prism: {
       additionalLanguages: ["powershell", "csharp", "sql"]
+    },
+    mermaid: {
+      theme: {
+        light: "neutral",
+        dark: "dark"
+      }
     }
   },
-  themes: []
+  themes: ["@docusaurus/theme-mermaid"]
 };
 
 module.exports = config;
