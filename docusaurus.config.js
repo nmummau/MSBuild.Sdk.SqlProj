@@ -23,7 +23,7 @@ const config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: "https://github.com/rr-wfm//MSBuild.Sdk.SqlProj/tree/master/"
+          editUrl: "https://github.com/rr-wfm/MSBuild.Sdk.SqlProj/edit/master/"
         },
         blog: false,
         pages: false,
