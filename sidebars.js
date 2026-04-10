@@ -3,6 +3,7 @@ const sidebars = {
     "intro",
     "getting-started",
     "project-file",
+    "limitations-and-workarounds",
     "references",
     "packaging-and-publishing",
     "integrations-and-compatibility",
