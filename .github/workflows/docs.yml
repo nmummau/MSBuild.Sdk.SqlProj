@@ -5,10 +5,18 @@ on:
     branches: [ master ]
     paths:
       - 'docs/**'
+      - 'src/**'
+      - 'versioned_docs/**'
+      - 'versioned_sidebars/**'
       - '.github/workflows/docs.yml'
+      - 'docusaurus.config.js'
+      - 'sidebars.js'
+      - 'package.json'
+      - 'package-lock.json'
       - 'README.md'
       - 'CONTRIBUTING.md'
       - 'CODE_OF_CONDUCT.md'
+      - 'versions.json'
   workflow_dispatch:
 
 permissions:
