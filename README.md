@@ -12,7 +12,6 @@ A MSBuild SDK that produces SQL Server Data-Tier Application packages (`.dacpac`
 ## Documentation
 
 - Documentation site: https://rr-wfm.github.io/MSBuild.Sdk.SqlProj/
-- Documentation source: [docs/](docs/index.md)
 
 ## Code of conduct
 

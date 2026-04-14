@@ -32,7 +32,7 @@ You should now have a project file with the following contents:
     <TargetFramework>net10.0</TargetFramework>
     <SqlServerVersion>Sql160</SqlServerVersion>
     <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
-    <!-- For additional properties that can be set here, please refer to https://github.com/rr-wfm/MSBuild.Sdk.SqlProj#model-properties -->
+    <!-- For additional properties that can be set here, please refer to https://rr-wfm.github.io/MSBuild.Sdk.SqlProj/docs/project-configuration.html#model-properties -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -49,7 +49,7 @@ You should now have a project file with the following contents:
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Refer to https://github.com/rr-wfm/MSBuild.Sdk.SqlProj#publishing-support for supported publishing options -->
+    <!-- Refer to https://rr-wfm.github.io/MSBuild.Sdk.SqlProj/docs/publishing.html for supported publishing options -->
   </PropertyGroup>
 </Project>
 ```
