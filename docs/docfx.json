@@ -5,13 +5,16 @@
       {
         "files": [
           "index.md",
-          "toc.yml"
+          "toc.yml",
+          "docs/toc.yml",
+          "docs/index.md",
+          "docs/**.md",
+          "docs/**.yml"
         ]
       },
       {
         "src": "..",
         "files": [
-          "README.md",
           "CODE_OF_CONDUCT.md",
           "*.png",
           "*.jpg",
@@ -38,7 +41,8 @@
     "output": "_site",
     "template": [
       "default",
-      "modern"
+      "modern",
+      "templates/custom"
     ],
     "globalMetadata": {
       "_appTitle": "MSBuild.Sdk.SqlProj",

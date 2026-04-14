@@ -1,8 +1,13 @@
 # MSBuild.Sdk.SqlProj
 
-This DocFX site organizes the existing project documentation into a more navigable structure without rewriting the source content.
+MSBuild.Sdk.SqlProj is an MSBuild SDK for producing SQL Server Data-Tier Application packages (`.dacpac`) from SQL scripts using SDK-style .NET projects.
 
-Start with the sections in the left navigation for a guided flow, or open the full project guide here:
+This documentation covers:
 
-- [Project README](../README.md)
-- [Code of Conduct](../CODE_OF_CONDUCT.md)
+- Getting started with new SQL projects
+- Project configuration and SQLCMD variables
+- Package and project references
+- Packaging, publishing, and script generation
+- Tooling, integrations, and runtime limitations
+
+Use the top navigation to move between major sections, or start with [Docs](docs/index.md).

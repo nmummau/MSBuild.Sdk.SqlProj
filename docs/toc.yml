@@ -1,64 +1,8 @@
-- name: Home
-  href: index.md
-- name: Getting Started
-  items:
-    - name: Introduction
-      href: ../README.md#introduction
-    - name: Usage
-      href: ../README.md#usage
-    - name: Editing the Project File
-      href: ../README.md#editing-the-project-file
-    - name: Use an Existing Database
-      href: ../README.md#use-an-existing-database
-    - name: Item Templates
-      href: ../README.md#item-templates
-- name: Configuration
-  items:
-    - name: Model Properties
-      href: ../README.md#model-properties
-    - name: Model Compiler Options
-      href: ../README.md#model-compiler-options
-    - name: Pre- and Post-Deployment Scripts
-      href: ../README.md#pre--and-post-deployment-scripts
-    - name: SQLCMD Variables
-      href: ../README.md#sqlcmd-variables
-- name: References and Packaging
-  items:
-    - name: Package References
-      href: ../README.md#package-references
-    - name: Referencing System Databases
-      href: ../README.md#referencing-system-databases
-    - name: Project References
-      href: ../README.md#project-references
-    - name: Circular References and SuppressMissingDependenciesErrors
-      href: ../README.md#circular-references-and-suppressmissingdependencieserrors
-    - name: Packaging Support
-      href: ../README.md#packaging-support
-    - name: Publishing Support
-      href: ../README.md#publishing-support
-    - name: Script Generation
-      href: ../README.md#script-generation
-- name: Advanced Topics
-  items:
-    - name: Entity Relationship Diagram
-      href: ../README.md#entity-relationship-diagram
-    - name: Static Code Analysis
-      href: ../README.md#static-code-analysis
-    - name: Integrations
-      href: ../README.md#integrations
-    - name: .NET Runtime Support
-      href: ../README.md#net-runtime-support
-    - name: Workaround for Parser Errors
-      href: ../README.md#workaround-for-parser-errors-sql46010
-    - name: Reference from Class Library
-      href: ../README.md#reference-msbuildsdksqlproj-from-class-library
-    - name: Refactor Log Support
-      href: ../README.md#refactor-log-support
-    - name: SQL CLR Objects Support
-      href: ../README.md#sql-clr-objects-support
-    - name: Known Limitations
-      href: ../README.md#known-limitations
-- name: Community
-  items:
-    - name: Code of Conduct
-      href: ../CODE_OF_CONDUCT.md
+- name: Docs
+  href: docs/
+- name: GitHub
+  href: https://github.com/rr-wfm/MSBuild.Sdk.SqlProj
+- name: NuGet
+  href: https://www.nuget.org/packages/MSBuild.Sdk.SqlProj
+- name: Releases
+  href: https://github.com/rr-wfm/MSBuild.Sdk.SqlProj/releases
